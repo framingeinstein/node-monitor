@@ -13,14 +13,20 @@ var settings = require("./configuration/settings"),
 var provider = new MongoProvider('localhost', 27017, 'monitor', 'result');
 
 validator.on("page-error", function (page, results, notifier) {
-	notifier.notify();
-	//console.log(results);
+	
+	/*
+		This is where the undefined rule was comming from.  It is trying to emit a global page error for any issues on a page.
+	*/
+	
+	notifier.notify(null, results.validations);
+	console.log(results);
 });
 validator.on("rule-error", function (rule, notifier) {
-	
+	//console.log(rule);
 	notifier.notify(rule);
 	//console.log(results);
 });
+//console.dir(rules.sites);
 for (var i = 0; i < rules.sites.length; i++){
 	var site = rules.sites[i];
 	var notifier = new Notifier();
